@@ -17,7 +17,12 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndDelete(cardId)
-    .then((card) => res.send(card))
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message: 'Карточки с таким id не существует' });
+      }
+      return res.send(card);
+    })
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 
@@ -27,7 +32,12 @@ const addLike = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .then((card) => res.send(card))
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message: 'Карточки с таким id не существует' });
+      }
+      return res.send(card);
+    })
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 
@@ -37,7 +47,12 @@ const deleteLike = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .then((card) => res.send(card))
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message: 'Карточки с таким id не существует' });
+      }
+      return res.send(card);
+    })
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 

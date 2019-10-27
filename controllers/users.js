@@ -8,10 +8,13 @@ const getUsers = (req, res) => {
 
 const getUser = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => res.send(user))
-    .catch(() => res.status(404).send({
-      message: 'Нет пользователя с таким id',
-    }));
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Пользователя с таким id не существует' });
+      }
+      return res.send(user);
+    })
+    .catch((err) => res.status(500).send({ message: err.message }));
 };
 
 const createUser = (req, res) => {
@@ -25,7 +28,12 @@ const updateProfile = (req, res) => {
   const { name, about } = req.body;
   const userId = req.user._id;
   User.findByIdAndUpdate(userId, { name, about })
-    .then((user) => res.send(user))
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Пользователя с таким id не существует' });
+      }
+      return res.send(user);
+    })
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 
@@ -33,7 +41,12 @@ const updateAvatar = (req, res) => {
   const { avatar } = req.body;
   const userId = req.user._id;
   User.findByIdAndUpdate(userId, { avatar })
-    .then((user) => res.send(user))
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Пользователя с таким id не существует' });
+      }
+      return res.send(user);
+    })
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 
