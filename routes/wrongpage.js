@@ -1,6 +1,5 @@
 const wrongPage = (req, res) => {
-  res.status(404);
-  res.send({ message: 'Запрашиваемый ресурс не найден' });
+  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
 };
 
 module.exports = { wrongPage };

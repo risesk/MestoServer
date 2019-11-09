@@ -1,20 +1,16 @@
-const users = require('../data/users.json');
+const userRouter = require('express').Router();
+const {
+  getUsers,
+  getUser,
+  createUser,
+  updateProfile,
+  updateAvatar,
+} = require('../controllers/users');
 
-const getUsers = (req, res) => {
-  res.send(users);
-};
+userRouter.get('/', getUsers);
+userRouter.get('/:userId', getUser);
+userRouter.post('/', createUser);
+userRouter.patch('/me', updateProfile);
+userRouter.patch('/me/avatar', updateAvatar);
 
-const getUser = (req, res) => {
-  users.forEach((user) => {
-    // eslint-disable-next-line no-underscore-dangle
-    if (req.params.id === user._id) {
-      res.send(user);
-      // eslint-disable-next-line no-useless-return
-      return;
-    }
-  });
-  res.status(404);
-  res.send({ message: 'Нет пользователя с таким id' });
-};
-
-module.exports = { getUsers, getUser };
+module.exports = userRouter;
