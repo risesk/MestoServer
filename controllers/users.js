@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const secretkey = require('../middlewares/auth');
+const { secretkey } = require('../middlewares/auth');
 
 const getUsers = (req, res) => {
   User.find({})

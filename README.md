@@ -1,5 +1,5 @@
 # MestoServer
-[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/risesk/mesto?label=version)]
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/risesk/MestoServer?label=version)]
 
 #### Возможности API
 1. GET-запрос ```localhost:3000/users``` возвращает JSON-список всех пользователей;
