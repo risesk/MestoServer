@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 const Card = require('../models/card');
 
 const getCards = (req, res) => {
@@ -16,12 +17,18 @@ const createCard = (req, res) => {
 
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
-  Card.findByIdAndDelete(cardId)
+  Card.findById(cardId)
     .then((card) => {
       if (!card) {
         return res.status(404).send({ message: 'Карточки с таким id не существует' });
+      } else if (card.owner.toString() !== req.user._id.toString()) {
+        return res.status(403).send({ message: 'Недостаточно прав' });
+      } else {
+        return Card.findByIdAndRemove(cardId)
+          .then((cardForDelete) => {
+            res.send(cardForDelete);
+          });
       }
-      return res.send(card);
     })
     .catch((err) => res.status(500).send({ message: err.message }));
 };
