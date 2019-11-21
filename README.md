@@ -1,6 +1,10 @@
 # MestoServer
 [![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/risesk/MestoServer?label=version)]
 
+##### Сылки на сервер: 
+https://mestoapp.info  
+http://84.201.131.4
+
 #### Возможности API
 1. GET-запрос ```localhost:3000/users``` возвращает JSON-список всех пользователей;
 2. GET-запрос ```localhost:3000/cards``` возвращает JSON-список всех карточек;

@@ -46,7 +46,7 @@ const createUser = (req, res, next) => {
 const updateProfile = (req, res, next) => {
   const { name, about } = req.body;
   const userId = req.user._id;
-  User.findByIdAndUpdate(userId, { name, about })
+  User.findByIdAndUpdate(userId, { name, about }, { runValidators: true })
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователя с таким id не существует');
@@ -59,7 +59,7 @@ const updateProfile = (req, res, next) => {
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   const userId = req.user._id;
-  User.findByIdAndUpdate(userId, { avatar })
+  User.findByIdAndUpdate(userId, { avatar }, { runValidators: true })
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователя с таким id не существует');
