@@ -2,7 +2,7 @@
 [![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/risesk/MestoServer?label=version)]
 
 ##### Сылки на сервер: 
-https://mestoapp.info  
+https://mestoapp.site 
 http://84.201.131.4
 
 #### Возможности API
