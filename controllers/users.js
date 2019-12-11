@@ -2,25 +2,27 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { secretkey } = require('../middlewares/auth');
+const NotFoundError = require('../errors/not-found-error');
+const UnauthorizedError = require('../errors/unauthorized-error');
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch(next);
 };
 
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Пользователя с таким id не существует' });
+        throw new NotFoundError('Пользователя с таким id не существует');
       }
       return res.send(user);
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch(next);
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const {
     name,
     about,
@@ -38,36 +40,36 @@ const createUser = (req, res) => {
       password: hash,
     }))
     .then((user) => res.send(user))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch(next);
 };
 
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
   const { name, about } = req.body;
   const userId = req.user._id;
-  User.findByIdAndUpdate(userId, { name, about })
+  User.findByIdAndUpdate(userId, { name, about }, { runValidators: true })
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Пользователя с таким id не существует' });
+        throw new NotFoundError('Пользователя с таким id не существует');
       }
       return res.send(user);
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch(next);
 };
 
-const updateAvatar = (req, res) => {
+const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   const userId = req.user._id;
-  User.findByIdAndUpdate(userId, { avatar })
+  User.findByIdAndUpdate(userId, { avatar }, { runValidators: true })
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Пользователя с таким id не существует' });
+        throw new NotFoundError('Пользователя с таким id не существует');
       }
       return res.send(user);
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch(next);
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -86,7 +88,7 @@ const login = (req, res) => {
         .end();
     })
     .catch((err) => {
-      res.status(401).send({ message: err.message });
+      next(new UnauthorizedError(err.message));
     });
 };
 
